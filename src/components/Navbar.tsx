@@ -23,10 +23,10 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">PB</span>
+                <span className="text-white font-bold text-sm">⚡</span>
               </div>
-              <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                PortfolioBuilder
+              <span className="text-xl font-bold text-foreground">
+                Portfolio<span className="text-primary">AI</span>
               </span>
             </Link>
           </div>

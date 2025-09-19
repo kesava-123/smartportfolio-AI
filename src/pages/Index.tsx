@@ -107,57 +107,127 @@ const Index = () => {
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-gradient-primary text-white border-0">
-              <Sparkles className="h-4 w-4 mr-2" />
-              Launch Offer - Limited Time!
-            </Badge>
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-slide-up">
-              Build Your Dream
-              <br />
-              <span className="bg-gradient-primary bg-clip-text text-transparent">Portfolio</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto animate-slide-up">
-              AI-powered resume builder and portfolio platform for students. 
-              Get placement-ready with intelligent analysis and beautiful templates.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
             
-            {/* Countdown Timer */}
-            <div className="glass-card p-6 rounded-2xl max-w-md mx-auto mb-8 animate-glow">
-              <div className="flex items-center justify-center mb-4">
-                <Timer className="h-5 w-5 text-accent mr-2" />
-                <span className="text-sm font-medium text-accent">Special Launch Offer Ends In:</span>
+            {/* Left Side - Content */}
+            <div className="space-y-8">
+              <div className="flex gap-3 mb-6">
+                <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-2">
+                  <Zap className="h-4 w-4 mr-2" />
+                  AI-Powered Platform
+                </Badge>
+                <Badge className="bg-success/20 text-success border-success/30 px-4 py-2">
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  3 US Clients Deployed
+                </Badge>
               </div>
-              <div className="grid grid-cols-4 gap-4 text-center">
-                <div className="neo-card p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{timeLeft.days}</div>
-                  <div className="text-xs text-muted-foreground">Days</div>
-                </div>
-                <div className="neo-card p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{timeLeft.hours}</div>
-                  <div className="text-xs text-muted-foreground">Hours</div>
-                </div>
-                <div className="neo-card p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{timeLeft.minutes}</div>
-                  <div className="text-xs text-muted-foreground">Minutes</div>
-                </div>
-                <div className="neo-card p-3 rounded-lg">
-                  <div className="text-2xl font-bold text-primary">{timeLeft.seconds}</div>
-                  <div className="text-xs text-muted-foreground">Seconds</div>
-                </div>
-              </div>
-            </div>
+              
+              <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+                <span className="text-primary">AI-Powered</span>
+                <br />
+                <span className="text-foreground">Portfolio & Resume</span>
+                <br />
+                <span className="text-primary">Builder</span>
+              </h1>
+              
+              <p className="text-xl text-muted-foreground max-w-lg leading-relaxed">
+                Transform your career with our intelligent platform. Build ATS-friendly resumes, 
+                stunning portfolios, and get AI-powered insights to land your dream job.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4">
-                Start Free Trial
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              {/* Rating & Success Rate */}
+              <div className="flex items-center gap-8">
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-muted-foreground">5.0 Rating</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-success" />
+                  <span className="text-muted-foreground">100% Success Rate</span>
+                </div>
+              </div>
+
+              {/* Pricing */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="text-4xl font-bold text-primary">₹250</div>
+                  <div className="text-xl text-muted-foreground line-through">₹999</div>
+                  <Badge className="bg-accent text-white px-3 py-1">75% OFF</Badge>
+                </div>
+                <p className="text-success font-semibold">
+                  First 10 users get FREE Portfolio Website!
+                </p>
+                
+                {/* Countdown */}
+                <div className="text-accent">
+                  Offer ends in: <span className="font-bold">{timeLeft.days} Days</span>
+                </div>
+              </div>
+
               <Link to="/products">
-                <Button variant="outline" size="lg" className="glass-button text-lg px-8 py-4">
+                <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow px-8 py-4">
+                  <ArrowRight className="mr-2 h-5 w-5" />
                   View Sample Portfolios
                 </Button>
               </Link>
+            </div>
+
+            {/* Right Side - Profile with Floating Elements */}
+            <div className="relative">
+              {/* Main Profile Image */}
+              <div className="relative w-80 h-80 mx-auto">
+                <img 
+                  src={founderImage} 
+                  alt="Kesava Masanam" 
+                  className="w-full h-full object-cover rounded-3xl shadow-2xl"
+                />
+                
+                {/* AI Badge */}
+                <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center shadow-glow animate-float">
+                  <Zap className="h-8 w-8 text-white" />
+                </div>
+
+                {/* Floating Stats Cards */}
+                <div className="absolute -left-12 top-12 glass-card p-4 rounded-xl animate-float shadow-lg">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-primary">500+</div>
+                    <div className="text-sm text-muted-foreground">Portfolio Templates</div>
+                  </div>
+                </div>
+
+                <div className="absolute -right-16 top-1/3 glass-card p-4 rounded-xl animate-float shadow-lg" style={{animationDelay: '1s'}}>
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-primary">AI</div>
+                    <div className="text-sm text-muted-foreground">Powered Tools</div>
+                  </div>
+                </div>
+
+                <div className="absolute -left-8 bottom-16 glass-card p-3 rounded-xl animate-float shadow-lg" style={{animationDelay: '2s'}}>
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-primary">Kesava Masanam</div>
+                    <div className="text-xs text-muted-foreground">Portfolio & AI Specialist</div>
+                    <div className="flex items-center justify-center mt-2 text-xs text-muted-foreground">
+                      <Mail className="h-3 w-3 mr-1" />
+                      masanamkesava@gmail.com
+                    </div>
+                    <div className="flex items-center justify-center text-xs text-muted-foreground">
+                      <Phone className="h-3 w-3 mr-1" />
+                      +91 9059086142
+                    </div>
+                  </div>
+                </div>
+
+                <div className="absolute -right-12 bottom-8 glass-card p-4 rounded-xl animate-float shadow-lg" style={{animationDelay: '3s'}}>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-success">98%</div>
+                    <div className="text-sm text-muted-foreground">Job Success Rate</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
