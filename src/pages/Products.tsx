@@ -122,38 +122,35 @@ const Products = () => {
         {/* Portfolio Grid */}
         <section className="px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {portfolioSamples.map((portfolio) => (
-                <Card key={portfolio.id} className="glass-card border-0 hover-lift hover-glow group overflow-hidden">
-                  <CardHeader className="p-6">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="relative">
-                          <img
-                            src={portfolio.image}
-                            alt={portfolio.name}
-                            className="w-16 h-16 rounded-full object-cover ring-2 ring-white/20"
-                          />
-                          <div className={`absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r ${portfolio.gradient} rounded-full flex items-center justify-center`}>
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          </div>
-                        </div>
-                        <div>
-                          <CardTitle className="text-xl font-bold">{portfolio.name}</CardTitle>
-                          <p className="text-muted-foreground">{portfolio.role}</p>
-                          <Badge variant="secondary" className="mt-1">
-                            {portfolio.category}
-                          </Badge>
-                        </div>
+                <Card key={portfolio.id} className="glass-card border-0 hover-lift hover-glow group overflow-hidden h-[600px]">
+                  {/* Portfolio Preview Image */}
+                  <div className="h-64 bg-gradient-to-br from-primary/20 to-purple-600/20 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-background/80 to-background/40 flex items-center justify-center">
+                      <div className="text-center p-6">
+                        <Globe className="h-12 w-12 mx-auto mb-4 text-primary" />
+                        <h3 className="text-lg font-semibold mb-2">{portfolio.name}'s Portfolio</h3>
+                        <p className="text-sm text-muted-foreground">Modern Portfolio Design</p>
                       </div>
+                    </div>
+                  </div>
+                  
+                  <CardHeader className="p-6">
+                    <div className="text-center">
+                      <CardTitle className="text-2xl font-bold mb-2">{portfolio.name}</CardTitle>
+                      <p className="text-muted-foreground text-lg mb-3">{portfolio.role}</p>
+                      <Badge variant="secondary" className="text-sm px-3 py-1">
+                        {portfolio.category}
+                      </Badge>
                     </div>
                   </CardHeader>
                   
                   <CardContent className="p-6 pt-0">
-                    <p className="text-muted-foreground mb-4">{portfolio.description}</p>
+                    <p className="text-muted-foreground mb-6 text-center">{portfolio.description}</p>
                     
                     {/* Technologies */}
-                    <div className="flex flex-wrap gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-8 justify-center">
                       {portfolio.technologies.map((tech, index) => (
                         <Badge
                           key={index}
@@ -170,19 +167,9 @@ const Products = () => {
                       <Link to={`/sample-portfolio/${portfolio.id}`} className="flex-1">
                         <Button className="w-full bg-gradient-primary hover:opacity-90 text-white">
                           <User className="mr-2 h-4 w-4" />
-                          View Profile
+                          View Portfolio
                         </Button>
                       </Link>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        asChild
-                        className="glass-button"
-                      >
-                        <a href={portfolio.github} target="_blank" rel="noopener noreferrer">
-                          <Github className="h-4 w-4" />
-                        </a>
-                      </Button>
                       <Button
                         variant="outline"
                         size="icon"
@@ -210,11 +197,8 @@ const Products = () => {
                 Get started with our AI-powered platform and create a portfolio that stands out.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4">
-                  Start Building Now
-                </Button>
                 <Link to="/contact">
-                  <Button variant="outline" size="lg" className="glass-button text-lg px-8 py-4">
+                  <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4">
                     Get Custom Portfolio
                   </Button>
                 </Link>

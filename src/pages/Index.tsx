@@ -168,65 +168,62 @@ const Index = () => {
                 </div>
               </div>
 
-              <Link to="/products">
-                <Button size="lg" className="bg-gradient-primary hover:opacity-90 text-white shadow-glow px-8 py-4">
-                  <ArrowRight className="mr-2 h-5 w-5" />
-                  View Sample Portfolios
+              <Link to="/contact">
+                <Button 
+                  size="lg" 
+                  className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4"
+                >
+                  Get Started Free
                 </Button>
               </Link>
+              
+              {/* Business Hours */}
+              <div className="glass-card p-6 rounded-xl">
+                <h3 className="text-lg font-semibold mb-4 text-center">Business Hours</h3>
+                <div className="space-y-2 text-center">
+                  <div className="flex justify-between text-sm">
+                    <span>Mon - Fri:</span>
+                    <span className="text-primary">9:00 AM - 6:00 PM</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Saturday:</span>
+                    <span className="text-primary">10:00 AM - 4:00 PM</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span>Sunday:</span>
+                    <span className="text-muted-foreground">Closed</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Right Side - Profile with Floating Elements */}
             <div className="relative">
               {/* Main Profile Image */}
               <div className="relative w-80 h-80 mx-auto">
-                <img 
-                  src={founderImage} 
-                  alt="Kesava Masanam" 
-                  className="w-full h-full object-cover rounded-3xl shadow-2xl"
+              <div className="relative">
+                <img
+                  src={founderImage}
+                  alt="Kesava Masanam - Founder"
+                  className="w-80 h-80 rounded-2xl object-cover shadow-2xl ring-4 ring-primary/20"
                 />
                 
-                {/* AI Badge */}
-                <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center shadow-glow animate-float">
-                  <Zap className="h-8 w-8 text-white" />
+                {/* Floating stats */}
+                <div className="absolute -top-4 -left-4 glass-card p-4 rounded-xl animate-float">
+                  <div className="text-2xl font-bold text-primary">3</div>
+                  <div className="text-xs text-muted-foreground">US Clients</div>
                 </div>
-
-                {/* Floating Stats Cards */}
-                <div className="absolute -left-12 top-12 glass-card p-4 rounded-xl animate-float shadow-lg">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-primary">500+</div>
-                    <div className="text-sm text-muted-foreground">Portfolio Templates</div>
-                  </div>
+                
+                <div className="absolute -bottom-4 -right-4 glass-card p-4 rounded-xl animate-float-delayed">
+                  <div className="text-2xl font-bold text-primary">100%</div>
+                  <div className="text-xs text-muted-foreground">Success</div>
                 </div>
-
-                <div className="absolute -right-16 top-1/3 glass-card p-4 rounded-xl animate-float shadow-lg" style={{animationDelay: '1s'}}>
-                  <div className="text-center">
-                    <div className="text-lg font-bold text-primary">AI</div>
-                    <div className="text-sm text-muted-foreground">Powered Tools</div>
-                  </div>
+                
+                <div className="absolute top-1/2 -left-8 glass-card p-3 rounded-lg animate-float">
+                  <div className="text-lg font-bold text-primary">500+</div>
+                  <div className="text-xs text-muted-foreground">Portfolios</div>
                 </div>
-
-                <div className="absolute -left-8 bottom-16 glass-card p-3 rounded-xl animate-float shadow-lg" style={{animationDelay: '2s'}}>
-                  <div className="text-center">
-                    <div className="text-xl font-bold text-primary">Kesava Masanam</div>
-                    <div className="text-xs text-muted-foreground">Portfolio & AI Specialist</div>
-                    <div className="flex items-center justify-center mt-2 text-xs text-muted-foreground">
-                      <Mail className="h-3 w-3 mr-1" />
-                      masanamkesava@gmail.com
-                    </div>
-                    <div className="flex items-center justify-center text-xs text-muted-foreground">
-                      <Phone className="h-3 w-3 mr-1" />
-                      +91 9059086142
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute -right-12 bottom-8 glass-card p-4 rounded-xl animate-float shadow-lg" style={{animationDelay: '3s'}}>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-success">98%</div>
-                    <div className="text-sm text-muted-foreground">Job Success Rate</div>
-                  </div>
-                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -375,7 +372,58 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
+        {/* Portfolio Samples */}
+        <section className="py-24 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4">Portfolio Samples</h2>
+              <p className="text-xl text-muted-foreground">
+                See how our students showcase their skills
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[
+                {
+                  title: "Tech Portfolio",
+                  description: "Modern developer portfolio with projects showcase",
+                  image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=300&fit=crop",
+                },
+                {
+                  title: "Design Portfolio",
+                  description: "Creative designer portfolio with stunning visuals",
+                  image: "https://images.unsplash.com/photo-1558655146-364adaf1fcc9?w=400&h=300&fit=crop",
+                },
+                {
+                  title: "Data Science Portfolio",
+                  description: "Analytics-focused portfolio with project insights",
+                  image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop",
+                }
+              ].map((sample, index) => (
+                <Card key={index} className="glass-card border-0 overflow-hidden hover-lift group">
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      src={sample.image}
+                      alt={sample.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold mb-2">{sample.title}</h3>
+                    <p className="text-muted-foreground text-sm mb-4">{sample.description}</p>
+                    <Link to="/products">
+                      <Button variant="outline" size="sm" className="glass-button">
+                        View Sample
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Testimonials */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">

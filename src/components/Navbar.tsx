@@ -8,11 +8,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/products", label: "Portfolio Samples" },
-    { href: "/contact", label: "Contact" },
-  ];
+          const navItems = [
+            { name: "Home", href: "/" },
+            { name: "Portfolio Samples", href: "/products" },
+            { name: "Resume Builder", href: "/resume-builder" },
+            { name: "Contact", href: "/contact" },
+          ];
 
   const isActive = (href: string) => location.pathname === href;
 
@@ -44,7 +45,7 @@ const Navbar = () => {
                       : "text-foreground/80 hover:text-foreground hover:bg-white/10"
                   }`}
                 >
-                  {item.label}
+                  {item.name}
                 </Link>
               ))}
             </div>
@@ -84,9 +85,11 @@ const Navbar = () => {
               </Button>
             </div>
             <ThemeToggle />
-            <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow">
-              Get Started
-            </Button>
+            <Link to="/contact">
+              <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow">
+                Get Started
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -119,7 +122,7 @@ const Navbar = () => {
                 }`}
                 onClick={() => setIsOpen(false)}
               >
-                {item.label}
+                {item.name}
               </Link>
             ))}
             <div className="pt-4 flex items-center space-x-2">
@@ -154,9 +157,11 @@ const Navbar = () => {
                 </a>
               </Button>
             </div>
-            <Button className="w-full mt-4 bg-gradient-primary hover:opacity-90 text-white">
-              Get Started
-            </Button>
+            <Link to="/contact">
+              <Button className="w-full mt-4 bg-gradient-primary hover:opacity-90 text-white">
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       )}
