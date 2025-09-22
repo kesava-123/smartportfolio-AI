@@ -24,16 +24,18 @@ const Contact = () => {
     message: "",
   });
 
-  // 🟣 Compact, theme-colored toast + redirect back to homepage after submit
+  // ✅ Redirect to the same page after FormSubmit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // point FormSubmit redirect to your site root (homepage)
     const form = e.target as HTMLFormElement;
+
+    // Ensure _next is set to the current URL so the redirect is back to this contact page
     const nextInput = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
-    if (nextInput) {
-      nextInput.value = `${window.location.origin}/`;
-    }
+    if (nextInput) nextInput.value = window.location.href;
+
+    // Submit in the same tab
+    form.target = "_self";
 
     toast({
       title: "Message Sent!",
@@ -44,7 +46,6 @@ const Contact = () => {
         "bg-primary text-primary-foreground ring-1 ring-primary/40 w-auto h-auto",
     });
 
-    // give the toast a tiny moment, then submit (navigation will happen to _next)
     setTimeout(() => {
       form.submit();
       setFormData({ name: "", email: "", phone: "", message: "" });
@@ -74,10 +75,8 @@ const Contact = () => {
       title: "Email Us",
       detail: "masanamkesava@gmail.com",
       description: "We'll respond within 24 hours",
-      // you can swap this to your mailto-with-subject/body if you like:
-      // action:
-      //  "mailto:masanamkesava@gmail.com?subject=Hi%20Kesava%20Request%20for%20Website%20Portfolio%20and%20Resume&body=Hi%20Kesava%0D%0A%0D%0AI%20found%20it%20useful%20for%20making%20my%20resume%20and%20portfolio.%20We%20want%20to%20talk%20to%20you.%0D%0A%0D%0ARegards,%0D%0A[Your%20Name]%0D%0A[details]",
-      action: "mailto:masanamkesava@gmail.com",
+      action:
+        "mailto:masanamkesava@gmail.com?subject=Hi%20Kesava%20Request%20for%20Website%20Portfolio%20and%20Resume&body=Hi%20Kesava%0D%0A%0D%0AI%20found%20it%20useful%20for%20making%20my%20resume%20and%20portfolio.%20We%20want%20to%20talk%20to%20you.%0D%0A%0D%0ARegards,%0D%0A[Your%20Name]%0D%0A[details]",
       color: "from-blue-500 to-cyan-600",
     },
     {
@@ -145,9 +144,9 @@ const Contact = () => {
                 <CardContent>
                   <form
                     onSubmit={handleSubmit}
-                    action="https://smartportfolio-ai.netlify.app/contact"
+                    action="https://formsubmit.co/masanamkesava@gmail.com"
                     method="POST"
-                    // target removed so we stay in the same tab and follow _next
+                    target="_self"
                     className="space-y-6"
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -218,8 +217,8 @@ const Contact = () => {
                     {/* Hidden FormSubmit options */}
                     <input type="hidden" name="_template" value="table" />
                     <input type="hidden" name="_captcha" value="false" />
-                    {/* This will be overwritten to `${window.location.origin}/` in handleSubmit */}
-                    <input type="hidden" name="_next" value="/" />
+                    {/* Will be set to window.location.href on submit */}
+                    <input type="hidden" name="_next" defaultValue="" />
 
                     <Button
                       type="submit"
@@ -252,26 +251,14 @@ const Contact = () => {
                     client expertise
                   </p>
                   <div className="flex justify-center space-x-2">
-                    <Button
-                      size="sm"
-                      asChild
-                      className="bg-gradient-primary hover:opacity-90 text-white"
-                    >
+                    <Button size="sm" asChild className="bg-gradient-primary hover:opacity-90 text-white">
                       <a href="tel:9059086142">
                         <Phone className="h-4 w-4 mr-1" />
                         Call
                       </a>
                     </Button>
-                    <Button
-                      size="sm"
-                      asChild
-                      className="bg-gradient-accent hover:opacity-90 text-white"
-                    >
-                      <a
-                        href="https://wa.me/9059086142"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                    <Button size="sm" asChild className="bg-gradient-accent hover:opacity-90 text-white">
+                      <a href="https://wa.me/9059086142" target="_blank" rel="noopener noreferrer">
                         <MessageCircle className="h-4 w-4 mr-1" />
                         Chat
                       </a>
@@ -296,22 +283,11 @@ const Contact = () => {
                           <p className="text-sm text-primary mb-1">{method.detail}</p>
                           <p className="text-xs text-muted-foreground">{method.description}</p>
                         </div>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          asChild
-                          className="glass-button"
-                        >
+                        <Button size="sm" variant="outline" asChild className="glass-button">
                           <a
                             href={method.action}
-                            target={
-                              method.action.startsWith("http") ? "_blank" : undefined
-                            }
-                            rel={
-                              method.action.startsWith("http")
-                                ? "noopener noreferrer"
-                                : undefined
-                            }
+                            target={method.action.startsWith("http") ? "_blank" : undefined}
+                            rel={method.action.startsWith("http") ? "noopener noreferrer" : undefined}
                           >
                             Contact
                           </a>
@@ -328,8 +304,7 @@ const Contact = () => {
                   <Clock className="h-8 w-8 text-primary mx-auto mb-2" />
                   <h4 className="font-semibold mb-2">Quick Response Time</h4>
                   <p className="text-sm text-muted-foreground">
-                    We typically respond to all inquiries within 2-4 hours
-                    during business hours.
+                    We typically respond to all inquiries within 2-4 hours during business hours.
                   </p>
                 </CardContent>
               </Card>
@@ -360,19 +335,11 @@ const Contact = () => {
             <div className="glass-card p-8 rounded-3xl text-center">
               <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
               <p className="text-muted-foreground mb-6">
-                Don't wait! The launch offer ends soon. Contact us now and
-                secure your spot.
+                Don't wait! The launch offer ends soon. Contact us now and secure your spot.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  asChild
-                  className="bg-gradient-primary hover:opacity-90 text-white shadow-glow"
-                >
-                  <a
-                    href="https://wa.me/9059086142"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                <Button asChild className="bg-gradient-primary hover:opacity-90 text-white shadow-glow">
+                  <a href="https://wa.me/9059086142" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Start WhatsApp Chat
                   </a>
