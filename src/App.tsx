@@ -10,6 +10,7 @@ import Contact from "./pages/Contact";
 import SamplePortfolio from "./pages/SamplePortfolio";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import NotFound from "./pages/NotFound";
+import ThankYou from "@/pages/ThankYou";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/resume-builder" element={<ResumeBuilder />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/sample-portfolio/:id" element={<SamplePortfolio />} />
+            <Route path="/thank-you" element={<ThankYou />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

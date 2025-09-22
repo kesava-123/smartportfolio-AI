@@ -24,19 +24,19 @@ const Contact = () => {
     message: "",
   });
 
-  // ✅ Redirect to the same page after FormSubmit
+  // ✅ Redirect to /thank-you after form submission (same tab)
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     const form = e.target as HTMLFormElement;
 
-    // Ensure _next is set to the current URL so the redirect is back to this contact page
+    // Point FormSubmit redirect to /thank-you (works in dev & prod)
     const nextInput = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
-    if (nextInput) nextInput.value = window.location.href;
+    if (nextInput) nextInput.value = `${window.location.origin}/thank-you`;
 
     // Submit in the same tab
     form.target = "_self";
 
+    // Tiny themed toast
     toast({
       title: "Message Sent!",
       description: "We'll get back to you within 24 hours.",
@@ -144,7 +144,7 @@ const Contact = () => {
                 <CardContent>
                   <form
                     onSubmit={handleSubmit}
-                    action="https://smartportfolio-ai.netlify.app/thankyou"
+                    action="https://formsubmit.co/masanamkesava@gmail.com"
                     method="POST"
                     target="_self"
                     className="space-y-6"
@@ -217,7 +217,7 @@ const Contact = () => {
                     {/* Hidden FormSubmit options */}
                     <input type="hidden" name="_template" value="table" />
                     <input type="hidden" name="_captcha" value="false" />
-                    {/* Will be set to window.location.href on submit */}
+                    {/* This will be set to /thank-you in handleSubmit */}
                     <input type="hidden" name="_next" defaultValue="" />
 
                     <Button
@@ -251,14 +251,26 @@ const Contact = () => {
                     client expertise
                   </p>
                   <div className="flex justify-center space-x-2">
-                    <Button size="sm" asChild className="bg-gradient-primary hover:opacity-90 text-white">
+                    <Button
+                      size="sm"
+                      asChild
+                      className="bg-gradient-primary hover:opacity-90 text-white"
+                    >
                       <a href="tel:9059086142">
                         <Phone className="h-4 w-4 mr-1" />
                         Call
                       </a>
                     </Button>
-                    <Button size="sm" asChild className="bg-gradient-accent hover:opacity-90 text-white">
-                      <a href="https://wa.me/9059086142" target="_blank" rel="noopener noreferrer">
+                    <Button
+                      size="sm"
+                      asChild
+                      className="bg-gradient-accent hover:opacity-90 text-white"
+                    >
+                      <a
+                        href="https://wa.me/9059086142"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <MessageCircle className="h-4 w-4 mr-1" />
                         Chat
                       </a>
@@ -280,14 +292,29 @@ const Contact = () => {
                         </div>
                         <div className="flex-1">
                           <h4 className="font-semibold mb-1">{method.title}</h4>
-                          <p className="text-sm text-primary mb-1">{method.detail}</p>
-                          <p className="text-xs text-muted-foreground">{method.description}</p>
+                          <p className="text-sm text-primary mb-1">
+                            {method.detail}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {method.description}
+                          </p>
                         </div>
-                        <Button size="sm" variant="outline" asChild className="glass-button">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          asChild
+                          className="glass-button"
+                        >
                           <a
                             href={method.action}
-                            target={method.action.startsWith("http") ? "_blank" : undefined}
-                            rel={method.action.startsWith("http") ? "noopener noreferrer" : undefined}
+                            target={
+                              method.action.startsWith("http") ? "_blank" : undefined
+                            }
+                            rel={
+                              method.action.startsWith("http")
+                                ? "noopener noreferrer"
+                                : undefined
+                            }
                           >
                             Contact
                           </a>
@@ -304,7 +331,8 @@ const Contact = () => {
                   <Clock className="h-8 w-8 text-primary mx-auto mb-2" />
                   <h4 className="font-semibold mb-2">Quick Response Time</h4>
                   <p className="text-sm text-muted-foreground">
-                    We typically respond to all inquiries within 2-4 hours during business hours.
+                    We typically respond to all inquiries within 2-4 hours
+                    during business hours.
                   </p>
                 </CardContent>
               </Card>
@@ -314,15 +342,21 @@ const Contact = () => {
           {/* FAQ Section */}
           <section className="py-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-              <p className="text-xl text-muted-foreground">Quick answers to common questions</p>
+              <h2 className="text-4xl font-bold mb-4">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Quick answers to common questions
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {faqs.map((faq, index) => (
                 <Card key={index} className="glass-card border-0 hover-lift">
                   <CardContent className="p-6">
-                    <h4 className="font-semibold mb-3 text-primary">{faq.question}</h4>
+                    <h4 className="font-semibold mb-3 text-primary">
+                      {faq.question}
+                    </h4>
                     <p className="text-muted-foreground">{faq.answer}</p>
                   </CardContent>
                 </Card>
@@ -335,16 +369,27 @@ const Contact = () => {
             <div className="glass-card p-8 rounded-3xl text-center">
               <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
               <p className="text-muted-foreground mb-6">
-                Don't wait! The launch offer ends soon. Contact us now and secure your spot.
+                Don't wait! The launch offer ends soon. Contact us now and
+                secure your spot.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button asChild className="bg-gradient-primary hover:opacity-90 text-white shadow-glow">
-                  <a href="https://wa.me/9059086142" target="_blank" rel="noopener noreferrer">
+                <Button
+                  asChild
+                  className="bg-gradient-primary hover:opacity-90 text-white shadow-glow"
+                >
+                  <a
+                    href="https://wa.me/9059086142"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Start WhatsApp Chat
                   </a>
                 </Button>
-                <Button asChild className="bg-gradient-accent hover:opacity-90 text-white">
+                <Button
+                  asChild
+                  className="bg-gradient-accent hover:opacity-90 text-white"
+                >
                   <a href="tel:9059086142">
                     <Phone className="mr-2 h-4 w-4" />
                     Call Now: 9059086142
