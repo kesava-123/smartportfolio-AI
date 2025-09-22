@@ -24,25 +24,31 @@ const Contact = () => {
     message: "",
   });
 
-  // 🟣 Compact, theme-colored toast + FormSubmit
+  // 🟣 Compact, theme-colored toast + redirect back to homepage after submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // ultra-compact toast (no description), themed with shadcn tokens
+    // point FormSubmit redirect to your site root (homepage)
+    const form = e.target as HTMLFormElement;
+    const nextInput = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
+    if (nextInput) {
+      nextInput.value = `${window.location.origin}/`;
+    }
+
     toast({
       title: "Message Sent!",
       description: "We'll get back to you within 24 hours.",
-      duration: 2000, // auto close after 2s
+      duration: 2000,
       className:
         "fixed bottom-4 right-4 text-xs font-medium px-2.5 py-1.5 rounded-md shadow-lg " +
         "bg-primary text-primary-foreground ring-1 ring-primary/40 w-auto h-auto",
     });
 
-    const form = e.target as HTMLFormElement;
+    // give the toast a tiny moment, then submit (navigation will happen to _next)
     setTimeout(() => {
-      form.submit(); // submit to FormSubmit (opens in new tab via target="_blank")
+      form.submit();
       setFormData({ name: "", email: "", phone: "", message: "" });
-    }, 100);
+    }, 120);
   };
 
   const handleInputChange = (
@@ -68,6 +74,9 @@ const Contact = () => {
       title: "Email Us",
       detail: "masanamkesava@gmail.com",
       description: "We'll respond within 24 hours",
+      // you can swap this to your mailto-with-subject/body if you like:
+      // action:
+      //  "mailto:masanamkesava@gmail.com?subject=Hi%20Kesava%20Request%20for%20Website%20Portfolio%20and%20Resume&body=Hi%20Kesava%0D%0A%0D%0AI%20found%20it%20useful%20for%20making%20my%20resume%20and%20portfolio.%20We%20want%20to%20talk%20to%20you.%0D%0A%0D%0ARegards,%0D%0A[Your%20Name]%0D%0A[details]",
       action: "mailto:masanamkesava@gmail.com",
       color: "from-blue-500 to-cyan-600",
     },
@@ -138,15 +147,12 @@ const Contact = () => {
                     onSubmit={handleSubmit}
                     action="https://formsubmit.co/masanamkesava@gmail.com"
                     method="POST"
-                    target="_blank"
+                    // target removed so we stay in the same tab and follow _next
                     className="space-y-6"
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label
-                          htmlFor="name"
-                          className="block text-sm font-medium mb-2"
-                        >
+                        <label htmlFor="name" className="block text-sm font-medium mb-2">
                           Full Name *
                         </label>
                         <Input
@@ -161,10 +167,7 @@ const Contact = () => {
                         />
                       </div>
                       <div>
-                        <label
-                          htmlFor="phone"
-                          className="block text-sm font-medium mb-2"
-                        >
+                        <label htmlFor="phone" className="block text-sm font-medium mb-2">
                           Phone Number *
                         </label>
                         <Input
@@ -181,10 +184,7 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium mb-2"
-                      >
+                      <label htmlFor="email" className="block text-sm font-medium mb-2">
                         Email Address *
                       </label>
                       <Input
@@ -200,10 +200,7 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-sm font-medium mb-2"
-                      >
+                      <label htmlFor="message" className="block text-sm font-medium mb-2">
                         Message *
                       </label>
                       <Textarea
@@ -221,7 +218,8 @@ const Contact = () => {
                     {/* Hidden FormSubmit options */}
                     <input type="hidden" name="_template" value="table" />
                     <input type="hidden" name="_captcha" value="false" />
-                    <input type="hidden" name="_next" value="https://smartportfolio-ai.netlify.app"></input>
+                    {/* This will be overwritten to `${window.location.origin}/` in handleSubmit */}
+                    <input type="hidden" name="_next" value="/" />
 
                     <Button
                       type="submit"
@@ -295,12 +293,8 @@ const Contact = () => {
                         </div>
                         <div className="flex-1">
                           <h4 className="font-semibold mb-1">{method.title}</h4>
-                          <p className="text-sm text-primary mb-1">
-                            {method.detail}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {method.description}
-                          </p>
+                          <p className="text-sm text-primary mb-1">{method.detail}</p>
+                          <p className="text-xs text-muted-foreground">{method.description}</p>
                         </div>
                         <Button
                           size="sm"
@@ -311,9 +305,7 @@ const Contact = () => {
                           <a
                             href={method.action}
                             target={
-                              method.action.startsWith("http")
-                                ? "_blank"
-                                : undefined
+                              method.action.startsWith("http") ? "_blank" : undefined
                             }
                             rel={
                               method.action.startsWith("http")
@@ -347,21 +339,15 @@ const Contact = () => {
           {/* FAQ Section */}
           <section className="py-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Quick answers to common questions
-              </p>
+              <h2 className="text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+              <p className="text-xl text-muted-foreground">Quick answers to common questions</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {faqs.map((faq, index) => (
                 <Card key={index} className="glass-card border-0 hover-lift">
                   <CardContent className="p-6">
-                    <h4 className="font-semibold mb-3 text-primary">
-                      {faq.question}
-                    </h4>
+                    <h4 className="font-semibold mb-3 text-primary">{faq.question}</h4>
                     <p className="text-muted-foreground">{faq.answer}</p>
                   </CardContent>
                 </Card>
@@ -391,10 +377,7 @@ const Contact = () => {
                     Start WhatsApp Chat
                   </a>
                 </Button>
-                <Button
-                  asChild
-                  className="bg-gradient-accent hover:opacity-90 text-white"
-                >
+                <Button asChild className="bg-gradient-accent hover:opacity-90 text-white">
                   <a href="tel:9059086142">
                     <Phone className="mr-2 h-4 w-4" />
                     Call Now: 9059086142
