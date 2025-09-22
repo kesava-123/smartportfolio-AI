@@ -144,7 +144,7 @@ const Contact = () => {
                 <CardContent>
                   <form
                     onSubmit={handleSubmit}
-                    action="https://formsubmit.co/masanamkesava@gmail.com"
+                    action="https://smartportfolio-ai.netlify.app/"
                     method="POST"
                     target="_self"
                     className="space-y-6"
