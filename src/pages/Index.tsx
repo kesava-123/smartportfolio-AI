@@ -16,13 +16,17 @@ import {
   Zap,
   Target,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  ExternalLink,
+  Heart,
+  Shield,
+  MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
-import founderImage from "@/assets/founder-profile.png";
+import founderImage from "@/assets/kesava-profile.png";
 
 const Index = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -475,31 +479,130 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex justify-center space-x-6 mb-8">
-            <Button variant="ghost" size="sm" asChild className="glass-button">
-              <a href="mailto:masanamkesava@gmail.com">
-                <Mail className="h-4 w-4 mr-2" />
-                Email
-              </a>
-            </Button>
-            <Button variant="ghost" size="sm" asChild className="glass-button">
-              <a href="tel:9059086142">
-                <Phone className="h-4 w-4 mr-2" />
-                Call
-              </a>
-            </Button>
-            <Button variant="ghost" size="sm" asChild className="glass-button">
-              <a href="https://wa.me/9059086142" target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="h-4 w-4 mr-2" />
-                WhatsApp
-              </a>
-            </Button>
+      <footer className="border-t border-white/10 py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold text-white">PortfolioAI</span>
+              </div>
+              <p className="text-gray-400 text-sm max-w-xs">
+                Transform your career with our AI-powered portfolio and resume builder. Join thousands of students who have successfully landed their dream jobs.
+              </p>
+              <div className="flex gap-4">
+                <Button variant="outline" size="sm" className="border-purple-500/30 text-purple-300 hover:bg-purple-500/20">
+                  <Phone className="w-4 h-4 mr-2" />
+                  +91 9059086142
+                </Button>
+                <Button variant="outline" size="sm" className="border-purple-500/30 text-purple-300 hover:bg-purple-500/20">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  WhatsApp
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+              <ul className="space-y-2 text-sm">
+                <li><Link to="/resume-builder" className="text-gray-400 hover:text-purple-300 transition-colors">Resume Builder</Link></li>
+                <li><Link to="#" className="text-gray-400 hover:text-purple-300 transition-colors">AI Tools</Link></li>
+                <li><Link to="/products" className="text-gray-400 hover:text-purple-300 transition-colors">Portfolio</Link></li>
+                <li><Link to="#pricing" className="text-gray-400 hover:text-purple-300 transition-colors">Pricing</Link></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-purple-300 transition-colors">Contact</Link></li>
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Resources</h3>
+              <ul className="space-y-2 text-sm">
+                <li><a href="#" className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-1">Sample Portfolios <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#" className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-1">Resume Templates <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#" className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-1">GitHub Repos <ExternalLink className="w-3 h-3" /></a></li>
+                <li><a href="#" className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-1">Success Stories <ExternalLink className="w-3 h-3" /></a></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Get In Touch</h3>
+              <div className="space-y-3 text-sm">
+                <div className="text-gray-400">
+                  <strong className="text-white">Business Hours:</strong><br />
+                  Mon - Fri: 9:00 AM - 6:00 PM<br />
+                  Sat - Sun: 10:00 AM - 4:00 PM
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-muted-foreground">
-            © 2024 PortfolioBuilder. Built with ❤️ for students.
-          </p>
+
+          {/* Special Offer Banner */}
+          <div className="bg-gradient-to-r from-green-500/10 to-purple-500/10 border border-green-500/20 rounded-lg p-4 mb-8">
+            <div className="flex items-center justify-center gap-2 text-center">
+              <Zap className="w-5 h-5 text-green-400" />
+              <span className="text-green-400 font-medium">Special Launch Offer</span>
+            </div>
+            <p className="text-gray-300 text-sm mt-1 text-center">
+              First 10 users get FREE Portfolio Website worth ₹500. Only 5 days left!
+            </p>
+          </div>
+
+          {/* CTA Section */}
+          <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-6 mb-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-white font-semibold text-lg mb-1">Ready to Transform Your Career?</h3>
+                <p className="text-gray-400 text-sm">Contact Kesava Masanam for personalized portfolio and resume solutions</p>
+              </div>
+              <div className="flex gap-3">
+                <Button variant="outline" size="sm" className="border-purple-500/30 text-purple-300 hover:bg-purple-500/20">
+                  <Mail className="w-4 h-4 mr-2" />
+                  masanamkesava@gmail.com
+                </Button>
+                <Button variant="outline" size="sm" className="border-purple-500/30 text-purple-300 hover:bg-purple-500/20">
+                  <Github className="w-4 h-4 mr-2" />
+                  GitHub Profile
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Section */}
+          <div className="border-t border-white/10 pt-6">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+              <div className="flex items-center gap-4 text-sm text-gray-400">
+                <span>© 2025 PortfolioAI. All rights reserved.</span>
+                <span>•</span>
+                <span className="flex items-center gap-1">Made with <Heart className="w-4 h-4 text-red-500" /> by Kesava Masanam</span>
+              </div>
+              <div className="flex gap-6 text-sm">
+                <Link to="#" className="text-gray-400 hover:text-purple-300 transition-colors">Privacy Policy</Link>
+                <Link to="#" className="text-gray-400 hover:text-purple-300 transition-colors">Terms of Service</Link>
+                <Link to="#" className="text-gray-400 hover:text-purple-300 transition-colors">Support</Link>
+              </div>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-6 mt-6 pt-6 border-t border-white/10 text-xs text-gray-400">
+              <div className="flex items-center gap-1">
+                <Shield className="w-4 h-4 text-green-400" />
+                <span>Trusted by students from top colleges</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <CheckCircle className="w-4 h-4 text-green-400" />
+                <span>98% job success rate</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Award className="w-4 h-4 text-yellow-400" />
+                <span>3 US clients successfully deployed</span>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
