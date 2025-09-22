@@ -145,7 +145,7 @@ const Contact = () => {
                 <CardContent>
                   <form
                     onSubmit={handleSubmit}
-                    action="https://formsubmit.co/masanamkesava@gmail.com"
+                    action="https://smartportfolio-ai.netlify.app/contact"
                     method="POST"
                     // target removed so we stay in the same tab and follow _next
                     className="space-y-6"
