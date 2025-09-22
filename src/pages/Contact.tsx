@@ -30,7 +30,9 @@ const Contact = () => {
     const form = e.target as HTMLFormElement;
 
     // Point FormSubmit redirect to /thank-you (works in dev & prod)
-    const nextInput = form.querySelector('input[name="_next"]') as HTMLInputElement | null;
+    const nextInput = form.querySelector(
+      'input[name="_next"]'
+    ) as HTMLInputElement | null;
     if (nextInput) nextInput.value = `${window.location.origin}/thank-you`;
 
     // Submit in the same tab
@@ -151,7 +153,10 @@ const Contact = () => {
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="name" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium mb-2"
+                        >
                           Full Name *
                         </label>
                         <Input
@@ -166,7 +171,10 @@ const Contact = () => {
                         />
                       </div>
                       <div>
-                        <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="phone"
+                          className="block text-sm font-medium mb-2"
+                        >
                           Phone Number *
                         </label>
                         <Input
@@ -183,7 +191,10 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Email Address *
                       </label>
                       <Input
@@ -199,7 +210,10 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="message"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Message *
                       </label>
                       <Textarea
@@ -218,7 +232,7 @@ const Contact = () => {
                     <input type="hidden" name="_template" value="table" />
                     <input type="hidden" name="_captcha" value="false" />
                     {/* This will be set to /thank-you in handleSubmit */}
-                    <input type="hidden" name="_next" defaultValue="" />
+                    <input type="hidden" name="_next" value="/thank-you" />
 
                     <Button
                       type="submit"
@@ -308,7 +322,9 @@ const Contact = () => {
                           <a
                             href={method.action}
                             target={
-                              method.action.startsWith("http") ? "_blank" : undefined
+                              method.action.startsWith("http")
+                                ? "_blank"
+                                : undefined
                             }
                             rel={
                               method.action.startsWith("http")
