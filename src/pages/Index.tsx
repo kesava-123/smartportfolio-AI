@@ -641,7 +641,7 @@ const Index = () => {
               careers with our platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
+              <Link to="/Products">
                 <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4">
                   Start Your Journey
                   <ArrowRight className="ml-2 h-5 w-5" />
