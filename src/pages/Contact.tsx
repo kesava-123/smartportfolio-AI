@@ -6,6 +6,7 @@ import {
   Send,
   Clock,
   MessageSquare,
+  CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import founderImage from "@/assets/founder-profile.png";
 
 const Contact = () => {
   const { toast } = useToast();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,34 +26,32 @@ const Contact = () => {
     message: "",
   });
 
-  // ✅ Redirect to /thank-you after form submission (same tab)
+  // Handle form submission with success message
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Show success state
+    setIsSubmitted(true);
+    
+    // Submit form data to FormSubmit
     const form = e.target as HTMLFormElement;
-
-    // Point FormSubmit redirect to /thank-you (works in dev & prod)
-    const nextInput = form.querySelector(
-      'input[name="_next"]'
-    ) as HTMLInputElement | null;
-    if (nextInput) nextInput.value = `${window.location.origin}/thank-you`;
-
-    // Submit in the same tab
-    form.target = "_self";
-
-    // Tiny themed toast
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours.",
-      duration: 2000,
-      className:
-        "fixed bottom-4 right-4 text-xs font-medium px-2.5 py-1.5 rounded-md shadow-lg " +
-        "bg-primary text-primary-foreground ring-1 ring-primary/40 w-auto h-auto",
-    });
-
-    setTimeout(() => {
-      form.submit();
+    const formData = new FormData(form);
+    
+    fetch("https://formsubmit.co/masanamkesava@gmail.com", {
+      method: "POST",
+      body: formData,
+    }).then(() => {
+      // Reset form after successful submission
       setFormData({ name: "", email: "", phone: "", message: "" });
-    }, 120);
+    }).catch((error) => {
+      console.error("Form submission error:", error);
+      setIsSubmitted(false);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    });
   };
 
   const handleInputChange = (
@@ -144,11 +144,24 @@ const Contact = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
+                  {isSubmitted ? (
+                    <div className="text-center py-12">
+                      <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                      <h3 className="text-2xl font-bold mb-2">Thank You! 🎉</h3>
+                      <p className="text-lg text-muted-foreground mb-6">
+                        Your message has been sent successfully. We'll get back to you within 24 hours.
+                      </p>
+                      <Button
+                        onClick={() => setIsSubmitted(false)}
+                        variant="outline"
+                        className="glass-button"
+                      >
+                        Send Another Message
+                      </Button>
+                    </div>
+                  ) : (
                   <form
                     onSubmit={handleSubmit}
-                    action="https://formsubmit.co/masanamkesava@gmail.com"
-                    method="POST"
-                    target="_self"
                     className="space-y-6"
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -231,8 +244,6 @@ const Contact = () => {
                     {/* Hidden FormSubmit options */}
                     <input type="hidden" name="_template" value="table" />
                     <input type="hidden" name="_captcha" value="false" />
-                    {/* This will be set to /thank-you in handleSubmit */}
-                    <input type="hidden" name="_next" value="/thank-you" />
 
                     <Button
                       type="submit"
@@ -242,6 +253,7 @@ const Contact = () => {
                       Send Message
                     </Button>
                   </form>
+                  )}
                 </CardContent>
               </Card>
             </div>
