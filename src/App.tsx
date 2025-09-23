@@ -11,7 +11,7 @@ import Contact from "./pages/Contact";
 import SamplePortfolio from "./pages/SamplePortfolio";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import NotFound from "./pages/NotFound";
-import ThankYou from "./pages/ThankYou"; // <-- changed to relative path
+import ThankYou from "./pages/thankyou";
 
 const queryClient = new QueryClient();
 
