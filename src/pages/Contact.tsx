@@ -30,9 +30,6 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Show success state
-    setIsSubmitted(true);
-    
     // Submit form data to FormSubmit
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
@@ -41,11 +38,14 @@ const Contact = () => {
       method: "POST",
       body: formData,
     }).then(() => {
-      // Reset form after successful submission
+      // Show success toast and reset form after successful submission
+      toast({
+        title: "Message Sent Successfully! 🎉",
+        description: "Thank you for your message. We'll get back to you within 24 hours.",
+      });
       setFormData({ name: "", email: "", phone: "", message: "" });
     }).catch((error) => {
       console.error("Form submission error:", error);
-      setIsSubmitted(false);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
@@ -144,22 +144,6 @@ const Contact = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {isSubmitted ? (
-                    <div className="text-center py-12">
-                      <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-2xl font-bold mb-2">Thank You! 🎉</h3>
-                      <p className="text-lg text-muted-foreground mb-6">
-                        Your message has been sent successfully. We'll get back to you within 24 hours.
-                      </p>
-                      <Button
-                        onClick={() => setIsSubmitted(false)}
-                        variant="outline"
-                        className="glass-button"
-                      >
-                        Send Another Message
-                      </Button>
-                    </div>
-                  ) : (
                   <form
                     onSubmit={handleSubmit}
                     className="space-y-6"
@@ -253,7 +237,6 @@ const Contact = () => {
                       Send Message
                     </Button>
                   </form>
-                  )}
                 </CardContent>
               </Card>
             </div>
