@@ -4,13 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Index from "./pages/Index";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import SamplePortfolio from "./pages/SamplePortfolio";
 import ResumeBuilder from "./pages/ResumeBuilder";
 import NotFound from "./pages/NotFound";
-import ThankYou from "@/pages/ThankYou";
+import ThankYou from "./pages/ThankYou"; // <-- changed to relative path
 
 const queryClient = new QueryClient();
 

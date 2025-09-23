@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 
-const ThankYou = () => {
+export default function ThankYou() {
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -14,18 +14,19 @@ const ThankYou = () => {
           <p className="text-lg text-muted-foreground mb-8">
             Your message has been sent successfully. We’ll get back to you within 24 hours.
           </p>
+
           <div className="flex gap-3 justify-center">
             <Link to="/">
               <Button className="bg-gradient-primary text-white">Go to Home</Button>
             </Link>
             <Link to="/contact">
-              <Button variant="outline" className="glass-button">Back to Contact</Button>
+              <Button variant="outline" className="glass-button">
+                Back to Contact
+              </Button>
             </Link>
           </div>
         </div>
       </section>
     </div>
   );
-};
-
-export default ThankYou;
+}
