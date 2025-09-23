@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Brain,
   FileText,
@@ -34,6 +34,8 @@ const MAILTO_HREF =
 const GITHUB_URL = "https://github.com/MasanamKesava";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   const [timeLeft, setTimeLeft] = useState({
     days: 5,
     hours: 12,
@@ -218,8 +220,7 @@ const Index = () => {
                   First 10 users get FREE Portfolio Website!
                 </p>
                 <div className="text-accent text-[16px]">
-                  Offer ends in:{" "}
-                  <span className="font-bold">{timeLeft.days} Days</span>
+                  Offer ends in: <span className="font-bold">{timeLeft.days} Days</span>
                 </div>
               </div>
 
@@ -641,21 +642,23 @@ const Index = () => {
               careers with our platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/Products">
-                <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4">
-                  Start Your Journey
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+              {/* ✅ Start Your Journey navigates to /contact */}
+              <Button
+                className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4"
+                onClick={() => navigate("/contact")}
+              >
+                Start Your Journey
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
 
-              <Link to="/contact">
-                <Button
-                  variant="outline"
-                  className="glass-button text-lg px-8 py-4"
-                >
-                  Contact Us
-                </Button>
-              </Link>
+              {/* Secondary CTA also routes to /contact */}
+              <Button
+                variant="outline"
+                className="glass-button text-lg px-8 py-4"
+                onClick={() => navigate("/contact")}
+              >
+                Contact Us
+              </Button>
             </div>
           </div>
         </div>
@@ -780,14 +783,6 @@ const Index = () => {
                     GitHub Repos <ExternalLink className="w-3 h-3" />
                   </a>
                 </li>
-                {/* <li>
-      <a
-        href="/#Success Stories"
-        className="text-gray-400 hover:text-purple-300 transition-colors flex items-center gap-1"
-      >
-        Success Stories <ExternalLink className="w-3 h-3" />
-      </a>
-    </li> */}
               </ul>
             </div>
 
