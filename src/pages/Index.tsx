@@ -226,7 +226,7 @@ const Index = () => {
 
               <Link to="/contact">
                 <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-9 py-5">
-                  Get Started Free
+                  Get Started Now
                 </Button>
               </Link>
 
@@ -645,9 +645,9 @@ const Index = () => {
               {/* ✅ Start Your Journey navigates to /contact */}
               <Button
                 className="bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg px-8 py-4"
-                onClick={() => navigate("/contact")}
+                  onClick={() => navigate("/register")}
               >
-                Start Your Journey
+                Register FREE Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
 

@@ -12,6 +12,7 @@ const Navbar = () => {
             { name: "Home", href: "/" },
             { name: "Portfolio Samples", href: "/products" },
             { name: "Resume Builder", href: "/resume-builder" },
+            { name: "Register FREE", href: "/register" },
             { name: "Contact", href: "/contact" },
           ];
 
