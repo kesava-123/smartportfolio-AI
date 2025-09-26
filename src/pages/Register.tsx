@@ -1,18 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
-import {
-  User,
-  Mail,
-  Phone,
-  GraduationCap,
-  CheckCircle,
-  Timer,
-  Gift,
-  Users,
-  Sparkles,
-  ArrowRight,
-  Loader2,
-} from "lucide-react";
+import { User, Mail, Phone, GraduationCap, CircleCheck as CheckCircle, Timer, Gift, Users, Sparkles, ArrowRight, Loader as Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
