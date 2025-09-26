@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   User,
@@ -11,6 +11,7 @@ import {
   Users,
   Sparkles,
   ArrowRight,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,12 +20,15 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
+import { registrationService, type RegistrationSettings } from "@/lib/supabase";
 
 const Register = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [registrationClosed, setRegistrationClosed] = useState(false);
-  const [registeredCount, setRegisteredCount] = useState(7); // Start at 7 to show urgency
+  const [registeredCount, setRegisteredCount] = useState(0);
+  const [settings, setSettings] = useState<RegistrationSettings | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,34 +38,99 @@ const Register = () => {
   });
 
   const [timeLeft, setTimeLeft] = useState({
-    days: 5,
-    hours: 12,
-    minutes: 30,
-    seconds: 45,
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
   });
 
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0)
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        if (prev.hours > 0)
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        if (prev.days > 0)
-          return {
-            ...prev,
-            days: prev.days - 1,
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          };
-        return prev;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
+  // Calculate time left from countdown end date
+  const calculateTimeLeft = useCallback((endDate: string) => {
+    const now = new Date().getTime();
+    const end = new Date(endDate).getTime();
+    const difference = end - now;
+
+    if (difference > 0) {
+      return {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      };
+    }
+
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
   }, []);
+
+  // Load initial data
+  const loadRegistrationData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [settingsData, count] = await Promise.all([
+        registrationService.getSettings(),
+        registrationService.getRegistrationCount(),
+      ]);
+
+      if (settingsData) {
+        setSettings(settingsData);
+        setRegisteredCount(settingsData.current_count);
+        setTimeLeft(calculateTimeLeft(settingsData.countdown_end_date));
+        
+        // Check if registration should be closed
+        const canRegister = await registrationService.canRegister();
+        setRegistrationClosed(!canRegister);
+      } else {
+        setRegistrationClosed(true);
+      }
+    } catch (error) {
+      console.error('Error loading registration data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load registration data. Please refresh the page.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [calculateTimeLeft, toast]);
+
+  // Load data on component mount
+  useEffect(() => {
+    loadRegistrationData();
+  }, [loadRegistrationData]);
+
+  // Set up real-time subscription for registration count updates
+  useEffect(() => {
+    const subscription = registrationService.subscribeToRegistrations((count) => {
+      setRegisteredCount(count);
+      if (settings && count >= settings.max_registrations) {
+        setRegistrationClosed(true);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [settings]);
+
+  // Countdown timer - updates every second
+  useEffect(() => {
+    if (!settings) return;
+
+    const timer = setInterval(() => {
+      const newTimeLeft = calculateTimeLeft(settings.countdown_end_date);
+      setTimeLeft(newTimeLeft);
+
+      // Check if time has expired
+      if (newTimeLeft.days === 0 && newTimeLeft.hours === 0 && 
+          newTimeLeft.minutes === 0 && newTimeLeft.seconds === 0) {
+        setRegistrationClosed(true);
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [settings, calculateTimeLeft]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -76,7 +145,7 @@ const Register = () => {
     if (registrationClosed) {
       toast({
         title: "Registration Closed",
-        description: "Sorry, we've reached our limit of 10 users.",
+        description: "Sorry, registration is no longer available.",
         variant: "destructive",
       });
       return;
@@ -85,32 +154,9 @@ const Register = () => {
     setIsSubmitting(true);
 
     try {
-      // Create FormData for FormSubmit
-      const submitData = new FormData();
-      submitData.append("name", formData.name);
-      submitData.append("email", formData.email);
-      submitData.append("phone", formData.phone);
-      submitData.append("college", formData.college);
-      submitData.append("course", formData.course);
-      submitData.append("_subject", "🎉 New Registration - FREE Portfolio Website Offer!");
-      submitData.append("_template", "table");
-      submitData.append("_captcha", "false");
+      const result = await registrationService.submitRegistration(formData);
 
-      const response = await fetch("https://formsubmit.co/masanamkesava@gmail.com", {
-        method: "POST",
-        body: submitData,
-      });
-
-      if (response.ok) {
-        // Increment registered count
-        const newCount = registeredCount + 1;
-        setRegisteredCount(newCount);
-        
-        // Check if we've reached the limit
-        if (newCount >= 10) {
-          setRegistrationClosed(true);
-        }
-
+      if (result.success) {
         toast({
           title: "Registration Successful! 🎉",
           description: "Welcome aboard! You'll receive your FREE portfolio website details via email within 24 hours.",
@@ -124,14 +170,17 @@ const Register = () => {
           college: "",
           course: "",
         });
+
+        // Refresh registration data
+        await loadRegistrationData();
       } else {
-        throw new Error("Registration failed");
+        throw new Error(result.error || "Registration failed");
       }
     } catch (error) {
       console.error("Registration error:", error);
       toast({
         title: "Registration Failed",
-        description: "Please try again or contact us directly.",
+        description: error instanceof Error ? error.message : "Please try again or contact us directly.",
         variant: "destructive",
       });
     } finally {
@@ -139,7 +188,21 @@ const Register = () => {
     }
   };
 
-  const spotsLeft = Math.max(0, 10 - registeredCount);
+  const spotsLeft = settings ? Math.max(0, settings.max_registrations - registeredCount) : 0;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <div className="pt-20 pb-16 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading registration data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -161,46 +224,50 @@ const Register = () => {
             </h1>
             
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              First 10 users get a completely FREE professional portfolio website worth ₹5000!
+              First {settings?.max_registrations || 10} users get a completely FREE professional portfolio website worth ₹5000!
             </p>
 
             {/* Countdown Timer */}
-            <div className="glass-card p-6 rounded-2xl max-w-2xl mx-auto mb-8">
-              <div className="flex items-center justify-center mb-4">
-                <Timer className="h-6 w-6 text-accent mr-2" />
-                <span className="text-lg font-semibold">Offer Ends In:</span>
+            {!registrationClosed && settings && (
+              <div className="glass-card p-6 rounded-2xl max-w-2xl mx-auto mb-8">
+                <div className="flex items-center justify-center mb-4">
+                  <Timer className="h-6 w-6 text-accent mr-2" />
+                  <span className="text-lg font-semibold">Offer Ends In:</span>
+                </div>
+                <div className="grid grid-cols-4 gap-4 text-center">
+                  <div className="bg-gradient-primary p-3 rounded-lg text-white">
+                    <div className="text-2xl font-bold">{timeLeft.days}</div>
+                    <div className="text-sm">Days</div>
+                  </div>
+                  <div className="bg-gradient-primary p-3 rounded-lg text-white">
+                    <div className="text-2xl font-bold">{timeLeft.hours}</div>
+                    <div className="text-sm">Hours</div>
+                  </div>
+                  <div className="bg-gradient-primary p-3 rounded-lg text-white">
+                    <div className="text-2xl font-bold">{timeLeft.minutes}</div>
+                    <div className="text-sm">Minutes</div>
+                  </div>
+                  <div className="bg-gradient-primary p-3 rounded-lg text-white">
+                    <div className="text-2xl font-bold">{timeLeft.seconds}</div>
+                    <div className="text-sm">Seconds</div>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-4 gap-4 text-center">
-                <div className="bg-gradient-primary p-3 rounded-lg text-white">
-                  <div className="text-2xl font-bold">{timeLeft.days}</div>
-                  <div className="text-sm">Days</div>
-                </div>
-                <div className="bg-gradient-primary p-3 rounded-lg text-white">
-                  <div className="text-2xl font-bold">{timeLeft.hours}</div>
-                  <div className="text-sm">Hours</div>
-                </div>
-                <div className="bg-gradient-primary p-3 rounded-lg text-white">
-                  <div className="text-2xl font-bold">{timeLeft.minutes}</div>
-                  <div className="text-sm">Minutes</div>
-                </div>
-                <div className="bg-gradient-primary p-3 rounded-lg text-white">
-                  <div className="text-2xl font-bold">{timeLeft.seconds}</div>
-                  <div className="text-sm">Seconds</div>
-                </div>
-              </div>
-            </div>
+            )}
 
             {/* Spots Counter */}
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
                 <span className="text-lg font-semibold">
-                  {registeredCount}/10 Registered
+                  {registeredCount}/{settings?.max_registrations || 10} Registered
                 </span>
               </div>
-              <div className="text-accent font-bold text-lg">
-                Only {spotsLeft} spots left!
-              </div>
+              {spotsLeft > 0 && (
+                <div className="text-accent font-bold text-lg">
+                  Only {spotsLeft} spots left!
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -222,8 +289,11 @@ const Register = () => {
                       <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                       <h3 className="text-xl font-bold mb-2">Registration Closed!</h3>
                       <p className="text-muted-foreground mb-6">
-                        We've reached our limit of 10 FREE portfolio websites. 
-                        Thank you for your interest!
+                        {spotsLeft === 0 
+                          ? `We've reached our limit of ${settings?.max_registrations || 10} FREE portfolio websites.`
+                          : "The registration period has ended."
+                        }
+                        <br />Thank you for your interest!
                       </p>
                       <Link to="/contact">
                         <Button className="bg-gradient-primary hover:opacity-90 text-white shadow-glow">
@@ -331,7 +401,10 @@ const Register = () => {
                         className="w-full bg-gradient-primary hover:opacity-90 text-white shadow-glow text-lg py-3"
                       >
                         {isSubmitting ? (
-                          "Registering..."
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Registering...
+                          </>
                         ) : (
                           <>
                             Claim FREE Portfolio
@@ -397,21 +470,23 @@ const Register = () => {
               </Card>
 
               {/* Urgency Card */}
-              <Card className="glass-card border-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/20">
-                <CardContent className="p-6 text-center">
-                  <Timer className="h-8 w-8 text-red-500 mx-auto mb-3" />
-                  <h3 className="text-lg font-bold mb-2 text-red-500">
-                    ⚡ Limited Time Only!
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    This offer is only available for the first 10 users. After that, 
-                    portfolio websites will cost ₹5000.
-                  </p>
-                  <div className="text-2xl font-bold text-red-500">
-                    {spotsLeft} spots remaining
-                  </div>
-                </CardContent>
-              </Card>
+              {!registrationClosed && (
+                <Card className="glass-card border-0 bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/20">
+                  <CardContent className="p-6 text-center">
+                    <Timer className="h-8 w-8 text-red-500 mx-auto mb-3" />
+                    <h3 className="text-lg font-bold mb-2 text-red-500">
+                      ⚡ Limited Time Only!
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      This offer is only available for the first {settings?.max_registrations || 10} users. After that, 
+                      portfolio websites will cost ₹5000.
+                    </p>
+                    <div className="text-2xl font-bold text-red-500">
+                      {spotsLeft} spots remaining
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
 
               {/* Success Stories */}
               <Card className="glass-card border-0">
@@ -450,7 +525,7 @@ const Register = () => {
                     Is this really FREE?
                   </h4>
                   <p className="text-muted-foreground text-sm">
-                    Yes! The first 10 users get a completely FREE portfolio website 
+                    Yes! The first {settings?.max_registrations || 10} users get a completely FREE portfolio website 
                     worth ₹5000. No hidden charges, no credit card required.
                   </p>
                 </CardContent>
